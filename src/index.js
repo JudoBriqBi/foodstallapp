@@ -40,7 +40,7 @@ app.get('/api/test', async (req, res) => {
 });
 app.get('/api/data', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM your_table_name');
+    const result = await pool.query('SELECT * FROM USERS');
     res.json(result.rows);
   } catch (error) {
     console.error('Error fetching data:', error);
