@@ -39,7 +39,7 @@ pool.on('error', (err) => {
 app.use(express.json());
 
 // Enable CORS for localhost and the frontend URL
-const allowedOrigins = ['http://localhost:5173', 'https://judopersonals.web.app'];
+const allowedOrigins = ['http://localhost:5173', 'https://judopersonals.web.app','https://ncet.nagarjunatechsolutions.com'];
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
