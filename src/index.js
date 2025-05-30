@@ -13,7 +13,10 @@ const pool = new Pool({
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  ssl: { rejectUnauthorized: false }, // Supabase requires SSL
+  ssl: { rejectUnauthorized: false },
+  max: 10, // Limit the number of connections
+  idleTimeoutMillis: 30000, // Close idle connections after 30 seconds
+  connectionTimeoutMillis: 2000, // Timeout for new connections
 });
 
 // Test database connection on server startup
@@ -25,6 +28,12 @@ pool.connect()
     console.error('Failed to connect to the PostgreSQL database:', error.message);
     process.exit(1); // Exit the process if the connection fails
   });
+
+// Handle unexpected errors on the pool
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client:', err);
+  process.exit(-1); // Exit the process to avoid undefined behavior
+});
 
 // Middleware to parse JSON
 app.use(express.json());

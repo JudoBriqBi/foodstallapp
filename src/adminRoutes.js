@@ -16,13 +16,13 @@ const pool = new Pool({
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const query = 'SELECT * FROM USERS WHERE username = $1 AND password = $2';
+    const query = 'SELECT * FROM USERS WHERE name = $1 AND password = $2';
     const values = [username, password];
     const result = await pool.query(query, values);
     if (result.rows.length > 0) {
       res.json({ success: true, message: 'Login successful', user: result.rows[0] });
     } else {
-      res.status(401).json({ success: false, message: 'Invalid credentials' });
+      res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
   } catch (error) {
     console.error('Error during login:', error);
