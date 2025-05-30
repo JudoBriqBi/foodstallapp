@@ -1,5 +1,6 @@
 const express = require('express');
 const { Pool } = require('pg');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
@@ -28,6 +29,18 @@ pool.connect()
 // Middleware to parse JSON
 app.use(express.json());
 
+// Enable CORS for localhost and the frontend URL
+const allowedOrigins = ['http://localhost:5173', 'https://judopersonals.web.app'];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
+
 // Test endpoint to check database connection
 app.get('/api/test', async (req, res) => {
   try {
@@ -47,6 +60,13 @@ app.get('/api/data', async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
+const adminRoutes = require('./adminRoutes');
+const userRoutes = require('./userRoutes');
+
+// Use routes
+app.use('/api/admin', adminRoutes);
+app.use('/api/users', userRoutes);
 
 // Start the server
 app.listen(port, () => {
