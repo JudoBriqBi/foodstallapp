@@ -20,13 +20,14 @@ router.post('/orders', async (req, res) => {
     roomNo,
     tableNo,
     orderId,
-    orderedItems
+    orderedItems,
+    orderType
   } = req.body;
 
   try {
-    const query = `INSERT INTO orders (order_id, user_name, phone_no, room_no, table_no, ordered_items) 
-                   VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-    const values = [orderId, userName, phoneNo, roomNo, tableNo, JSON.stringify(orderedItems)];
+    const query = `INSERT INTO orders (order_id, user_name, phone_no, room_no, table_no, ordered_items, order_type) 
+                   VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+    const values = [orderId, userName, phoneNo, roomNo, tableNo, JSON.stringify(orderedItems), orderType];
     const result = await pool.query(query, values);
     res.json({ success: true, order: result.rows[0] });
   } catch (error) {
