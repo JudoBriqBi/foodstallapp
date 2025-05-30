@@ -77,6 +77,11 @@ const userRoutes = require('./userRoutes');
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 
+// Simple health check route
+app.get('/', (req, res) => {
+  res.json({ status: 'healthy' });
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
